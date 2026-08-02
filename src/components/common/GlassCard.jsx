@@ -17,12 +17,12 @@ export const GlassCard = ({
       className={`glass-panel specular-border rounded-2xl sm:rounded-[22px] p-6 sm:p-8 relative overflow-hidden backdrop-blur-xl transition-all ${className}`}
       {...props}
     >
-      {/* Desktop Window Titlebar Option */}
+      {/* Desktop Window Titlebar Option with macOS Control Padding */}
       {(showDots || title || badge) && (
-        <div className="flex items-center justify-between pb-4 mb-4 border-b border-stone-200/60 dark:border-white/10 relative z-10">
+        <div className="flex items-center justify-between px-6 pt-4 pb-3.5 border-b border-stone-200/60 dark:border-white/10 relative z-10">
           <div className="flex items-center gap-3">
             {showDots && (
-              <div className="window-dots">
+              <div className="window-dots flex items-center gap-2 shrink-0">
                 <span className="window-dot window-dot-red" />
                 <span className="window-dot window-dot-yellow" />
                 <span className="window-dot window-dot-green" />

@@ -108,17 +108,19 @@ body {
   pointer-events: none;
 }
 
-/* GlassOS Window Header Accent Dots */
+/* GlassOS Window Header Accent Dots (Authentic macOS controls) */
 .window-dots {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
 }
 
 .window-dot {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 9999px;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .window-dot-red { background-color: #ff5f56; border: 1px solid #e0443e; }
