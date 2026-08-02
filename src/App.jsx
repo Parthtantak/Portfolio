@@ -1,9 +1,9 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { CyberCanvas } from './components/background/CyberCanvas';
-import { ScrollProgress } from './components/common/ScrollProgress';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { CommandPalette } from './components/common/CommandPalette';
+import { SectionReveal } from './components/common/SectionReveal';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Skills } from './components/sections/Skills';
@@ -55,9 +55,6 @@ export function App() {
 
   return (
     <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-400 selection:bg-[#de6430]/20 selection:text-[#de6430]">
-      {/* Scroll Reading Progress Line */}
-      <ScrollProgress />
-
       {/* Interactive Mesh Background Canvas */}
       <CyberCanvas />
 
@@ -71,15 +68,31 @@ export function App() {
       {/* Main Content Spatial Matrix */}
       <main className="relative z-10">
         <Hero />
-        <About />
-        <Skills />
+        <SectionReveal>
+          <About />
+        </SectionReveal>
+        <SectionReveal>
+          <Skills />
+        </SectionReveal>
         <Suspense fallback={<SectionLoader />}>
-          <Projects />
-          <Education />
-          <Achievements />
-          <ResumeSection />
-          <GithubDashboard />
-          <Contact />
+          <SectionReveal>
+            <Projects />
+          </SectionReveal>
+          <SectionReveal>
+            <Education />
+          </SectionReveal>
+          <SectionReveal>
+            <Achievements />
+          </SectionReveal>
+          <SectionReveal>
+            <ResumeSection />
+          </SectionReveal>
+          <SectionReveal>
+            <GithubDashboard />
+          </SectionReveal>
+          <SectionReveal>
+            <Contact />
+          </SectionReveal>
         </Suspense>
       </main>
 

@@ -11,6 +11,7 @@ export const portfolioData = {
     bio: "Motivated B.Tech IT student at Zeal College of Engineering & Research, Pune. Focused on building minimal, calm, and intelligent web interfaces with modern frontend technologies, clean code architecture, and creative visual design.",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
     resumeUrl: "#resume-download",
+    githubUsername: "parthtantak",
     statusText: "Pursuing B.Tech IT (2nd Year) • Open for Internships & Projects",
     statusAvailable: true,
     typingRoles: [

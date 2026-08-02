@@ -22,19 +22,18 @@ export const Navbar = ({ onOpenCmd, isDarkMode, onToggleTheme }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredNav, setHoveredNav] = useState(null);
 
-  // Scroll detection logic
+  // Scroll detection & IntersectionObserver logic for 60FPS section spy
   useEffect(() => {
     let lastScrollY = window.scrollY;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
-      setIsScrolled(currentScrollY > 30);
+      setIsScrolled(currentScrollY > 20);
 
       if (currentScrollY > 100) {
-        if (currentScrollY > lastScrollY + 6) {
+        if (currentScrollY > lastScrollY + 8) {
           setIsVisible(false);
-        } else if (currentScrollY < lastScrollY - 6) {
+        } else if (currentScrollY < lastScrollY - 8) {
           setIsVisible(true);
         }
       } else {
@@ -42,30 +41,37 @@ export const Navbar = ({ onOpenCmd, isDarkMode, onToggleTheme }) => {
       }
 
       lastScrollY = currentScrollY;
-
-      // Scroll spy calculation
-      const navbarHeight = 85;
-      const scrollPosition = currentScrollY + navbarHeight + 50;
-
-      for (let i = navItems.length - 1; i >= 0; i--) {
-        const section = document.getElementById(navItems[i].id);
-        if (section) {
-          const top = section.offsetTop;
-          const height = section.offsetHeight;
-
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(navItems[i].id);
-            break;
-          } else if (i === 0 && scrollPosition < top + height) {
-            setActiveSection(navItems[0].id);
-            break;
-          }
-        }
-      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll();
+
+    // Intersection Observer for active section detection
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -55% 0px',
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    navItems.forEach((item) => {
+      const element = document.getElementById(item.id);
+      if (element) observer.observe(element);
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   // Prevent background scroll during mobile menu
@@ -107,11 +113,11 @@ export const Navbar = ({ onOpenCmd, isDarkMode, onToggleTheme }) => {
       <motion.header
         initial={{ y: 0 }}
         animate={{ y: isVisible || mobileMenuOpen ? 0 : -100 }}
-        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? 'py-2.5 bg-[var(--glass-bg)] backdrop-blur-2xl border-b border-[var(--border-color)] shadow-sm'
-            : 'py-4 sm:py-5 bg-transparent'
+            ? 'py-2.5 bg-[var(--glass-bg)]/90 backdrop-blur-2xl border-b border-[var(--border-color)] shadow-md shadow-black/5 dark:shadow-black/20 brightness-[1.02]'
+            : 'py-4 sm:py-5 bg-transparent border-b border-transparent shadow-none'
         }`}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -119,8 +125,8 @@ export const Navbar = ({ onOpenCmd, isDarkMode, onToggleTheme }) => {
           <motion.button
             onClick={() => scrollTo('hero')}
             onMouseEnter={() => audioFx.playHover()}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             className="flex items-center gap-2.5 group text-left focus:outline-none cursor-pointer select-none"
           >
             <div className="relative w-8 h-8 rounded-xl bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-xs flex items-center justify-center font-mono shadow-xs overflow-hidden">
@@ -155,7 +161,7 @@ export const Navbar = ({ onOpenCmd, isDarkMode, onToggleTheme }) => {
                     audioFx.playHover();
                   }}
                   onMouseLeave={() => setHoveredNav(null)}
-                  className={`text-xs font-sans tracking-wide transition-colors relative px-3 py-1.5 rounded-full cursor-pointer select-none ${
+                  className={`text-xs font-sans tracking-wide transition-colors duration-200 relative px-3 py-1.5 rounded-full cursor-pointer select-none ${
                     isActive
                       ? 'text-zinc-950 dark:text-[#F8FAFC] font-bold'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'
@@ -164,7 +170,7 @@ export const Navbar = ({ onOpenCmd, isDarkMode, onToggleTheme }) => {
                   {isActive && (
                     <motion.div
                       layoutId="activeNavPill"
-                      className="absolute inset-0 bg-white dark:bg-[#1C1F26] rounded-full border border-stone-300/80 dark:border-white/10 shadow-2xs"
+                      className="absolute inset-0 bg-white dark:bg-[#1C1F26] rounded-full border border-stone-300/80 dark:border-white/10 shadow-xs"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -180,7 +186,7 @@ export const Navbar = ({ onOpenCmd, isDarkMode, onToggleTheme }) => {
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
-                      className="absolute bottom-0.5 left-3 right-3 h-[2px] bg-[#de6430] rounded-full"
+                      className="absolute bottom-0.5 left-3 right-3 h-[2px] bg-[#de6430] rounded-full shadow-[0_0_8px_rgba(222,100,48,0.75)]"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}

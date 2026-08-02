@@ -69,7 +69,7 @@ export const About = () => {
 
               <div className="relative h-80 sm:h-96 w-full overflow-hidden">
                 <img
-                  src="/parth.jpg"
+                  src="./parth.jpg"
                   alt="Parth Nitin Tantak"
                   className="w-full h-full object-cover object-top filter contrast-[1.04] saturate-[1.08] brightness-[1.01] group-hover:scale-105 transition-transform duration-700 ease-out"
                 />

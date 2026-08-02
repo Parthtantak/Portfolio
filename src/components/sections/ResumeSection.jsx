@@ -18,7 +18,7 @@ export const ResumeSection = () => {
     setDownloaded(true);
 
     const link = document.createElement('a');
-    link.href = '/Parth_Nitin_Tantak_Resume.pdf';
+    link.href = './Parth_Nitin_Tantak_Resume.pdf';
     link.download = 'Parth_Nitin_Tantak_Resume.pdf';
     document.body.appendChild(link);
     link.click();
