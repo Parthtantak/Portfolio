@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Download, 
-  Printer, 
   Maximize2, 
   X, 
   Check,
@@ -14,10 +13,6 @@ import {
   Code2,
   Briefcase,
   Award,
-  ZoomIn,
-  ZoomOut,
-  Maximize,
-  Minimize,
   FileText,
   AlertCircle
 } from 'lucide-react';
@@ -29,21 +24,14 @@ import { audioFx } from '../../utils/audio';
 export const ResumeSection = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [zoomScale, setZoomScale] = useState(1);
   const [toastMessage, setToastMessage] = useState(null);
   const [toastType, setToastType] = useState('success');
   const paperRef = useRef(null);
-  const printNodeRef = useRef(null);
 
   const showToast = (msg, type = 'success') => {
     setToastMessage(msg);
     setToastType(type);
     setTimeout(() => setToastMessage(null), 3500);
-  };
-
-  const handlePrint = () => {
-    audioFx.playClick();
-    window.print();
   };
 
   const handleDownloadPdf = async () => {
@@ -52,13 +40,12 @@ export const ResumeSection = () => {
     showToast('Generating high-resolution A4 PDF...', 'info');
 
     try {
-      // Find printable container or fallback to paperRef
-      const targetElement = printNodeRef.current || paperRef.current || document.querySelector('.resume-paper-document');
+      const targetElement = paperRef.current || document.querySelector('.resume-paper-document');
       if (!targetElement) {
-        throw new Error('Resume container element not found.');
+        throw new Error('Resume element not found.');
       }
 
-      // Render high-definition canvas (300 DPI equivalent with scale: 2.5)
+      // Render high-definition canvas (scale: 2.5 for crisp rendering)
       const canvas = await html2canvas(targetElement, {
         scale: 2.5,
         useCORS: true,
@@ -93,54 +80,15 @@ export const ResumeSection = () => {
       
       showToast('Parth_Nitin_Tantak_Resume.pdf downloaded successfully!', 'success');
     } catch (err) {
-      console.error('PDF Generation Exception:', err);
-      showToast('Failed to generate PDF. Retrying via browser print...', 'error');
-      try {
-        const originalTitle = document.title;
-        document.title = 'Parth_Nitin_Tantak_Resume';
-        window.print();
-        setTimeout(() => { document.title = originalTitle; }, 1000);
-      } catch (fallbackErr) {
-        console.error('Fallback print error:', fallbackErr);
-      }
+      console.error('PDF Download Exception:', err);
+      showToast('Failed to generate PDF. Please try again.', 'error');
     } finally {
       setIsDownloading(false);
     }
   };
 
-  const handleZoomIn = () => {
-    audioFx.playClick();
-    setZoomScale((prev) => Math.min(prev + 0.15, 1.6));
-  };
-
-  const handleZoomOut = () => {
-    audioFx.playClick();
-    setZoomScale((prev) => Math.max(prev - 0.15, 0.6));
-  };
-
-  const handleFitWidth = () => {
-    audioFx.playClick();
-    setZoomScale(1.15);
-  };
-
-  const handleFitPage = () => {
-    audioFx.playClick();
-    setZoomScale(0.85);
-  };
-
-  const toggleFullscreen = () => {
-    audioFx.playClick();
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch((err) => console.log(err));
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().catch((err) => console.log(err));
-      }
-    }
-  };
-
   return (
-    <section id="resume" className="py-8 sm:py-10 relative z-10 font-sans print:py-0 print:m-0">
+    <section id="resume" className="py-8 sm:py-10 relative z-10 font-sans">
       
       {/* Toast Notification Container */}
       <AnimatePresence>
@@ -167,10 +115,10 @@ export const ResumeSection = () => {
         )}
       </AnimatePresence>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 print:max-w-none print:p-0">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header Line */}
-        <div className="flex items-center gap-4 mb-8 text-xs font-mono print:hidden">
+        <div className="flex items-center gap-4 mb-8 text-xs font-mono">
           <span className="text-[#de6430] font-semibold">06 — resume</span>
           <div className="flex-1 border-b border-dashed border-[var(--border-color)]" />
           <span className="px-3 py-1 rounded-full bg-[#de6430]/15 text-[#de6430] border border-[#de6430]/30 text-[11px] font-mono font-bold">
@@ -179,19 +127,19 @@ export const ResumeSection = () => {
         </div>
 
         {/* Top Action Bar & Title Header */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8 print:hidden">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8">
           <div className="space-y-2">
             <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold tracking-tight text-[var(--text-primary)] leading-[1.15] relative inline-block">
               Curriculum Vitae
               <span className="block h-1 w-12 bg-[#de6430] rounded-full mt-1.5" />
             </h2>
             <p className="text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed font-sans font-normal max-w-xl">
-              ATS-compliant, structured single-page resume layout ready for recruiters, internship applications, and printing.
+              ATS-compliant, structured single-page resume layout ready for recruiters and applications.
             </p>
           </div>
 
-          {/* Top Action Buttons */}
-          <div className="flex flex-wrap items-center gap-3">
+          {/* Action Buttons: View Resume & Download Resume */}
+          <div className="flex items-center gap-3">
             <button
               onClick={() => {
                 audioFx.playClick();
@@ -200,15 +148,7 @@ export const ResumeSection = () => {
               className="px-4 py-2.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs font-bold font-mono flex items-center gap-2 hover:bg-stone-200/50 dark:hover:bg-[#1C1F26] active:scale-95 transition-all shadow-2xs cursor-pointer"
             >
               <Maximize2 className="w-4 h-4 text-[#de6430]" />
-              <span>Full View</span>
-            </button>
-
-            <button
-              onClick={handlePrint}
-              className="px-4 py-2.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs font-bold font-mono flex items-center gap-2 hover:bg-stone-200/50 dark:hover:bg-[#1C1F26] active:scale-95 transition-all shadow-2xs cursor-pointer"
-            >
-              <Printer className="w-4 h-4 text-[#de6430]" />
-              <span>Print</span>
+              <span>View Full Resume</span>
             </button>
 
             <button
@@ -446,96 +386,35 @@ export const ResumeSection = () => {
 
       </div>
 
-      {/* Dedicated Interactive Fullscreen Zoom Document Viewer Modal (Apple Preview / Notion / Acrobat Style) */}
+      {/* Clean Distraction-Free Minimalist Resume Viewer Modal */}
       <AnimatePresence>
         {modalOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-zinc-950/85 backdrop-blur-xl flex flex-col items-center justify-between p-3 sm:p-6 overflow-hidden print-hide"
+            className="fixed inset-0 z-50 bg-zinc-950/85 backdrop-blur-xl flex flex-col items-center justify-between p-3 sm:p-6 overflow-hidden"
           >
-            {/* Sticky Glass Toolbar (Apple Preview / Linear Style) */}
-            <div className="w-full max-w-5xl bg-zinc-900/90 dark:bg-[#111216] border border-white/10 rounded-2xl px-4 py-3 flex items-center justify-between shadow-2xl z-30 shrink-0 font-mono text-xs mb-4 no-print">
-              
-              {/* Document Info Badge */}
+            {/* Minimalist Top Bar */}
+            <div className="w-full max-w-4xl bg-zinc-900/90 dark:bg-[#111216] border border-white/10 rounded-2xl px-5 py-3 flex items-center justify-between shadow-xl z-30 shrink-0 font-mono text-xs mb-4">
               <div className="flex items-center gap-2.5">
                 <FileText className="w-4 h-4 text-[#de6430]" />
                 <span className="font-bold text-zinc-100 hidden sm:inline">Parth_Nitin_Tantak_Resume.pdf</span>
                 <span className="font-bold text-zinc-100 sm:hidden">Resume.pdf</span>
-                <span className="px-2 py-0.5 rounded bg-[#de6430]/20 text-[#de6430] text-[10px] font-bold">A4</span>
               </div>
 
-              {/* View Control Group (Zoom +, Zoom -, Fit Width, Fit Page, Fullscreen) */}
-              <div className="flex items-center gap-1 bg-zinc-950/70 dark:bg-[#1C1F26] px-2.5 py-1 rounded-xl border border-white/10">
-                <button
-                  onClick={handleZoomOut}
-                  title="Zoom Out"
-                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
-                >
-                  <ZoomOut className="w-3.5 h-3.5" />
-                </button>
-                
-                <span className="px-1 text-[11px] font-bold text-zinc-200 min-w-[36px] text-center">
-                  {Math.round(zoomScale * 100)}%
-                </span>
-                
-                <button
-                  onClick={handleZoomIn}
-                  title="Zoom In"
-                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
-                >
-                  <ZoomIn className="w-3.5 h-3.5" />
-                </button>
-
-                <div className="w-px h-3.5 bg-white/10 mx-1" />
-
-                <button
-                  onClick={handleFitWidth}
-                  title="Fit Width"
-                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
-                >
-                  <Maximize className="w-3.5 h-3.5" />
-                </button>
-
-                <button
-                  onClick={handleFitPage}
-                  title="Fit Page"
-                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
-                >
-                  <Minimize className="w-3.5 h-3.5" />
-                </button>
-
-                <button
-                  onClick={toggleFullscreen}
-                  title="Toggle Fullscreen"
-                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
-                >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* Action Buttons (Print, Download PDF, Close) */}
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handlePrint}
-                  className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-zinc-200 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
-                >
-                  <Printer className="w-3.5 h-3.5 text-[#de6430]" />
-                  <span className="hidden md:inline">Print</span>
-                </button>
-
+              <div className="flex items-center gap-3">
                 <button
                   onClick={handleDownloadPdf}
                   disabled={isDownloading}
-                  className="px-3.5 py-1.5 rounded-xl bg-[#de6430] text-white hover:bg-[#c85528] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-md disabled:opacity-60"
+                  className="px-4 py-2 rounded-xl bg-[#de6430] text-white hover:bg-[#c85528] text-xs font-bold flex items-center gap-2 transition-all cursor-pointer shadow-md disabled:opacity-60"
                 >
                   {isDownloading ? (
                     <Check className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
                   ) : (
                     <Download className="w-3.5 h-3.5" />
                   )}
-                  <span className="hidden sm:inline">{isDownloading ? 'Downloading PDF...' : 'Download PDF'}</span>
+                  <span>{isDownloading ? 'Downloading...' : 'Download Resume'}</span>
                 </button>
 
                 <button
@@ -543,26 +422,20 @@ export const ResumeSection = () => {
                     audioFx.playClick();
                     setModalOpen(false);
                   }}
-                  className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-zinc-200 transition-all cursor-pointer ml-1"
+                  className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-zinc-200 transition-all cursor-pointer"
                   title="Close Viewer"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-4.5 h-4.5" />
                 </button>
               </div>
-
             </div>
 
-            {/* Scrollable Document Canvas inside Modal */}
-            <div className="w-full max-w-5xl flex-1 overflow-y-auto overflow-x-auto p-2 sm:p-6 flex justify-center items-start scrollbar-thin">
+            {/* Centered Scrollable A4 Document Canvas */}
+            <div className="w-full max-w-4xl flex-1 overflow-y-auto p-2 sm:p-6 flex justify-center items-start scrollbar-thin">
               <motion.div
-                initial={{ scale: 0.96, opacity: 0 }}
+                initial={{ scale: 0.97, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.96, opacity: 0 }}
-                style={{
-                  transform: `scale(${zoomScale})`,
-                  transformOrigin: 'top center',
-                  transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
-                }}
+                exit={{ scale: 0.97, opacity: 0 }}
                 className="resume-paper-document bg-white text-slate-900 border border-stone-200 shadow-2xl rounded-[24px] p-6 sm:p-10 lg:p-12 w-full max-w-4xl space-y-9 font-sans transition-all relative my-auto"
               >
                 {/* Header Contact Block */}
