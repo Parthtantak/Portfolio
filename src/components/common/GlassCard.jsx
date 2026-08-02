@@ -8,6 +8,7 @@ export const GlassCard = ({
   showDots = false,
   title = '',
   badge = '',
+  contentClassName = '',
   ...props
 }) => {
   return (
@@ -42,7 +43,7 @@ export const GlassCard = ({
         </div>
       )}
 
-      <div className="relative z-10">{children}</div>
+      <div className={`relative z-10 ${contentClassName}`}>{children}</div>
     </motion.div>
   );
 };
