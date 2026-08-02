@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Download, 
@@ -16,10 +16,13 @@ import {
   Award,
   ZoomIn,
   ZoomOut,
-  RotateCcw,
-  FileText
+  Maximize,
+  Minimize,
+  FileText,
+  AlertCircle
 } from 'lucide-react';
-import html2pdf from 'html2pdf.js';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 import { GithubIcon, LinkedinIcon } from '../common/SocialIcons';
 import { audioFx } from '../../utils/audio';
 
@@ -27,6 +30,16 @@ export const ResumeSection = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [zoomScale, setZoomScale] = useState(1);
+  const [toastMessage, setToastMessage] = useState(null);
+  const [toastType, setToastType] = useState('success');
+  const paperRef = useRef(null);
+  const printNodeRef = useRef(null);
+
+  const showToast = (msg, type = 'success') => {
+    setToastMessage(msg);
+    setToastType(type);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
 
   const handlePrint = () => {
     audioFx.playClick();
@@ -36,47 +49,124 @@ export const ResumeSection = () => {
   const handleDownloadPdf = async () => {
     audioFx.playClick();
     setIsDownloading(true);
-
-    const element = document.querySelector('.resume-paper-document');
-    if (!element) {
-      setIsDownloading(false);
-      return;
-    }
+    showToast('Generating high-resolution A4 PDF...', 'info');
 
     try {
-      const opt = {
-        margin: [8, 8, 8, 8],
-        filename: 'Parth_Nitin_Tantak_Resume.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+      // Find printable container or fallback to paperRef
+      const targetElement = printNodeRef.current || paperRef.current || document.querySelector('.resume-paper-document');
+      if (!targetElement) {
+        throw new Error('Resume container element not found.');
+      }
 
-      await html2pdf().set(opt).from(element).save();
+      // Render high-definition canvas (300 DPI equivalent with scale: 2.5)
+      const canvas = await html2canvas(targetElement, {
+        scale: 2.5,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        windowWidth: 1024,
+        onclone: (clonedDoc) => {
+          const clonedPaper = clonedDoc.querySelector('.resume-paper-document');
+          if (clonedPaper) {
+            clonedPaper.style.transform = 'none';
+            clonedPaper.style.margin = '0';
+            clonedPaper.style.boxShadow = 'none';
+            clonedPaper.style.borderRadius = '0';
+          }
+        }
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.98);
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pdfWidth;
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, Math.min(imgHeight, pdfHeight));
+      pdf.save('Parth_Nitin_Tantak_Resume.pdf');
+      
+      showToast('Parth_Nitin_Tantak_Resume.pdf downloaded successfully!', 'success');
     } catch (err) {
-      console.error('Direct PDF download error:', err);
+      console.error('PDF Generation Exception:', err);
+      showToast('Failed to generate PDF. Retrying via browser print...', 'error');
+      try {
+        const originalTitle = document.title;
+        document.title = 'Parth_Nitin_Tantak_Resume';
+        window.print();
+        setTimeout(() => { document.title = originalTitle; }, 1000);
+      } catch (fallbackErr) {
+        console.error('Fallback print error:', fallbackErr);
+      }
     } finally {
-      setTimeout(() => setIsDownloading(false), 2000);
+      setIsDownloading(false);
     }
   };
 
   const handleZoomIn = () => {
     audioFx.playClick();
-    setZoomScale((prev) => Math.min(prev + 0.15, 1.5));
+    setZoomScale((prev) => Math.min(prev + 0.15, 1.6));
   };
 
   const handleZoomOut = () => {
     audioFx.playClick();
-    setZoomScale((prev) => Math.max(prev - 0.15, 0.7));
+    setZoomScale((prev) => Math.max(prev - 0.15, 0.6));
   };
 
-  const handleResetZoom = () => {
+  const handleFitWidth = () => {
     audioFx.playClick();
-    setZoomScale(1);
+    setZoomScale(1.15);
+  };
+
+  const handleFitPage = () => {
+    audioFx.playClick();
+    setZoomScale(0.85);
+  };
+
+  const toggleFullscreen = () => {
+    audioFx.playClick();
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => console.log(err));
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch((err) => console.log(err));
+      }
+    }
   };
 
   return (
     <section id="resume" className="py-8 sm:py-10 relative z-10 font-sans print:py-0 print:m-0">
+      
+      {/* Toast Notification Container */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-2xl backdrop-blur-xl border text-xs font-mono font-bold flex items-center gap-2.5 ${
+              toastType === 'error'
+                ? 'bg-rose-950/90 text-rose-200 border-rose-500/30'
+                : toastType === 'info'
+                ? 'bg-zinc-900/90 text-zinc-200 border-white/10'
+                : 'bg-emerald-950/90 text-emerald-200 border-emerald-500/30'
+            }`}
+          >
+            {toastType === 'error' ? (
+              <AlertCircle className="w-4 h-4 text-rose-400" />
+            ) : (
+              <Check className="w-4 h-4 text-emerald-400" />
+            )}
+            <span>{toastMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 print:max-w-none print:p-0">
         
         {/* Section Header Line */}
@@ -129,7 +219,7 @@ export const ResumeSection = () => {
               {isDownloading ? (
                 <Check className="w-4 h-4 text-emerald-400 animate-pulse" />
               ) : (
-                <Download className="w-4 h-4 text-[#de6430] dark:text-[#de6430]" />
+                <Download className="w-4 h-4 text-[#de6430]" />
               )}
               <span>{isDownloading ? 'Downloading PDF...' : 'Download Resume'}</span>
             </button>
@@ -137,8 +227,10 @@ export const ResumeSection = () => {
         </div>
 
         {/* Embedded Real Paper Document Preview (White Paper with Crisp Dark Text) */}
-        <div className="resume-paper-document bg-white text-slate-900 border border-stone-200 shadow-2xl rounded-[24px] p-6 sm:p-10 lg:p-12 max-w-4xl mx-auto space-y-9 font-sans transition-all relative overflow-hidden">
-          
+        <div 
+          ref={paperRef}
+          className="resume-paper-document bg-white text-slate-900 border border-stone-200 shadow-2xl rounded-[24px] p-6 sm:p-10 lg:p-12 max-w-4xl mx-auto space-y-9 font-sans transition-all relative overflow-hidden"
+        >
           {/* Header Contact Block */}
           <div className="border-b border-slate-200 pb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-1.5 max-w-lg">
@@ -199,7 +291,6 @@ export const ResumeSection = () => {
             </div>
             
             <div className="ml-4 pl-7 border-l-2 border-slate-200 space-y-6 relative">
-              {/* Item 1 */}
               <div className="relative">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#de6430] absolute -left-[33px] top-1.5 ring-4 ring-white" />
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-xs sm:text-sm text-slate-900 gap-1">
@@ -211,7 +302,6 @@ export const ResumeSection = () => {
                 </p>
               </div>
 
-              {/* Item 2 */}
               <div className="relative">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#de6430] absolute -left-[33px] top-1.5 ring-4 ring-white" />
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-xs sm:text-sm text-slate-900 gap-1">
@@ -223,7 +313,6 @@ export const ResumeSection = () => {
                 </p>
               </div>
 
-              {/* Item 3 */}
               <div className="relative">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#de6430] absolute -left-[33px] top-1.5 ring-4 ring-white" />
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-xs sm:text-sm text-slate-900 gap-1">
@@ -357,7 +446,7 @@ export const ResumeSection = () => {
 
       </div>
 
-      {/* Dedicated Interactive Fullscreen Zoom Document Viewer Modal */}
+      {/* Dedicated Interactive Fullscreen Zoom Document Viewer Modal (Apple Preview / Notion / Acrobat Style) */}
       <AnimatePresence>
         {modalOpen && (
           <motion.div
@@ -366,8 +455,10 @@ export const ResumeSection = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-zinc-950/85 backdrop-blur-xl flex flex-col items-center justify-between p-3 sm:p-6 overflow-hidden print-hide"
           >
-            {/* Modal Header Toolbar */}
-            <div className="w-full max-w-5xl bg-zinc-900/90 dark:bg-[#111216] border border-white/10 rounded-2xl px-4 py-3 flex items-center justify-between shadow-xl z-30 shrink-0 font-mono text-xs mb-4 no-print">
+            {/* Sticky Glass Toolbar (Apple Preview / Linear Style) */}
+            <div className="w-full max-w-5xl bg-zinc-900/90 dark:bg-[#111216] border border-white/10 rounded-2xl px-4 py-3 flex items-center justify-between shadow-2xl z-30 shrink-0 font-mono text-xs mb-4 no-print">
+              
+              {/* Document Info Badge */}
               <div className="flex items-center gap-2.5">
                 <FileText className="w-4 h-4 text-[#de6430]" />
                 <span className="font-bold text-zinc-100 hidden sm:inline">Parth_Nitin_Tantak_Resume.pdf</span>
@@ -375,35 +466,56 @@ export const ResumeSection = () => {
                 <span className="px-2 py-0.5 rounded bg-[#de6430]/20 text-[#de6430] text-[10px] font-bold">A4</span>
               </div>
 
-              {/* Zoom Controls */}
-              <div className="flex items-center gap-1.5 bg-zinc-950/60 dark:bg-[#1C1F26] px-2 py-1 rounded-xl border border-white/10">
+              {/* View Control Group (Zoom +, Zoom -, Fit Width, Fit Page, Fullscreen) */}
+              <div className="flex items-center gap-1 bg-zinc-950/70 dark:bg-[#1C1F26] px-2.5 py-1 rounded-xl border border-white/10">
                 <button
                   onClick={handleZoomOut}
                   title="Zoom Out"
-                  className="p-1 rounded text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
                 >
                   <ZoomOut className="w-3.5 h-3.5" />
                 </button>
+                
                 <span className="px-1 text-[11px] font-bold text-zinc-200 min-w-[36px] text-center">
                   {Math.round(zoomScale * 100)}%
                 </span>
+                
                 <button
                   onClick={handleZoomIn}
                   title="Zoom In"
-                  className="p-1 rounded text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
                 >
                   <ZoomIn className="w-3.5 h-3.5" />
                 </button>
+
+                <div className="w-px h-3.5 bg-white/10 mx-1" />
+
                 <button
-                  onClick={handleResetZoom}
-                  title="Reset Zoom"
-                  className="p-1 rounded text-zinc-400 hover:text-[#de6430] transition-colors cursor-pointer ml-0.5"
+                  onClick={handleFitWidth}
+                  title="Fit Width"
+                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
                 >
-                  <RotateCcw className="w-3 h-3" />
+                  <Maximize className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  onClick={handleFitPage}
+                  title="Fit Page"
+                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+                >
+                  <Minimize className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  onClick={toggleFullscreen}
+                  title="Toggle Fullscreen"
+                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+                >
+                  <Maximize2 className="w-3.5 h-3.5" />
                 </button>
               </div>
 
-              {/* Modal Actions */}
+              {/* Action Buttons (Print, Download PDF, Close) */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={handlePrint}
@@ -437,9 +549,10 @@ export const ResumeSection = () => {
                   <X className="w-4 h-4" />
                 </button>
               </div>
+
             </div>
 
-            {/* Scrollable Document Container inside Modal */}
+            {/* Scrollable Document Canvas inside Modal */}
             <div className="w-full max-w-5xl flex-1 overflow-y-auto overflow-x-auto p-2 sm:p-6 flex justify-center items-start scrollbar-thin">
               <motion.div
                 initial={{ scale: 0.96, opacity: 0 }}
