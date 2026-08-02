@@ -80,12 +80,12 @@ export const ResumeSection = () => {
           </div>
         </div>
 
-        {/* Embedded Real Paper Document Preview (Exact Replica of Attached Resume) */}
+        {/* Embedded Real Paper Document Preview (Matching Theme Accent Color) */}
         <div className="bg-white text-slate-900 border border-stone-200 shadow-2xl rounded-[24px] p-8 sm:p-14 lg:p-16 max-w-4xl mx-auto space-y-7 font-sans leading-relaxed transition-all relative overflow-hidden text-left">
           
           {/* Main Title & Personal Information */}
           <div className="space-y-3 pb-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#3b608f] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#de6430] tracking-tight">
               Resume
             </h1>
             <div className="space-y-1.5 text-sm text-slate-800 font-normal">
@@ -98,7 +98,7 @@ export const ResumeSection = () => {
 
           {/* Career Objective */}
           <div className="space-y-2">
-            <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+            <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
               Career Objective
             </h2>
             <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-normal">
@@ -108,7 +108,7 @@ export const ResumeSection = () => {
 
           {/* Education Qualifications */}
           <div className="space-y-2">
-            <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+            <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
               Education Qualifications
             </h2>
             <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-normal pl-4 list-disc">
@@ -126,7 +126,7 @@ export const ResumeSection = () => {
 
           {/* Technical Skills */}
           <div className="space-y-2">
-            <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+            <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
               Technical Skills
             </h2>
             <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-normal pl-4 list-disc">
@@ -138,7 +138,7 @@ export const ResumeSection = () => {
 
           {/* Hobbies & Interests */}
           <div className="space-y-2">
-            <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+            <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
               Hobbies & Interests
             </h2>
             <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-normal pl-4 list-disc">
@@ -150,7 +150,7 @@ export const ResumeSection = () => {
 
           {/* Achievements */}
           <div className="space-y-2">
-            <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+            <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
               Achievements
             </h2>
             <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-normal pl-4 list-disc">
@@ -160,7 +160,7 @@ export const ResumeSection = () => {
 
           {/* Strengths */}
           <div className="space-y-2">
-            <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+            <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
               Strengths
             </h2>
             <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-normal pl-4 list-disc">
@@ -175,7 +175,7 @@ export const ResumeSection = () => {
 
       </div>
 
-      {/* Full Resume Viewer Modal (Apple Preview / Notion Style) */}
+      {/* Full Resume Viewer Modal (Theme Orange Accents) */}
       <AnimatePresence>
         {modalOpen && (
           <motion.div
@@ -228,7 +228,7 @@ export const ResumeSection = () => {
               >
                 {/* Main Title & Personal Information */}
                 <div className="space-y-3 pb-2">
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-[#3b608f] tracking-tight">
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-[#de6430] tracking-tight">
                     Resume
                   </h1>
                   <div className="space-y-1.5 text-sm text-slate-800 font-normal">
@@ -241,7 +241,7 @@ export const ResumeSection = () => {
 
                 {/* Career Objective */}
                 <div className="space-y-2">
-                  <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+                  <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
                     Career Objective
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-normal">
@@ -251,7 +251,7 @@ export const ResumeSection = () => {
 
                 {/* Education Qualifications */}
                 <div className="space-y-2">
-                  <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+                  <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
                     Education Qualifications
                   </h2>
                   <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-normal pl-4 list-disc">
@@ -269,7 +269,7 @@ export const ResumeSection = () => {
 
                 {/* Technical Skills */}
                 <div className="space-y-2">
-                  <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+                  <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
                     Technical Skills
                   </h2>
                   <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-normal pl-4 list-disc">
@@ -281,7 +281,7 @@ export const ResumeSection = () => {
 
                 {/* Hobbies & Interests */}
                 <div className="space-y-2">
-                  <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+                  <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
                     Hobbies & Interests
                   </h2>
                   <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-normal pl-4 list-disc">
@@ -293,7 +293,7 @@ export const ResumeSection = () => {
 
                 {/* Achievements */}
                 <div className="space-y-2">
-                  <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+                  <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
                     Achievements
                   </h2>
                   <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-normal pl-4 list-disc">
@@ -303,7 +303,7 @@ export const ResumeSection = () => {
 
                 {/* Strengths */}
                 <div className="space-y-2">
-                  <h2 className="text-base sm:text-lg font-bold text-[#3b608f]">
+                  <h2 className="text-base sm:text-lg font-bold text-[#de6430]">
                     Strengths
                   </h2>
                   <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-normal pl-4 list-disc">
