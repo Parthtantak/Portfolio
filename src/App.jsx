@@ -11,7 +11,6 @@ import { Skills } from './components/sections/Skills';
 // Lazy loaded below-the-fold sections
 const Projects = lazy(() => import('./components/sections/Projects').then(m => ({ default: m.Projects })));
 const Education = lazy(() => import('./components/sections/Education').then(m => ({ default: m.Education })));
-const Certifications = lazy(() => import('./components/sections/Certifications').then(m => ({ default: m.Certifications })));
 const Achievements = lazy(() => import('./components/sections/Achievements').then(m => ({ default: m.Achievements })));
 const ResumeSection = lazy(() => import('./components/sections/ResumeSection').then(m => ({ default: m.ResumeSection })));
 const GithubDashboard = lazy(() => import('./components/sections/GithubDashboard').then(m => ({ default: m.GithubDashboard })));
@@ -77,7 +76,6 @@ export function App() {
         <Suspense fallback={<SectionLoader />}>
           <Projects />
           <Education />
-          <Certifications />
           <Achievements />
           <ResumeSection />
           <GithubDashboard />

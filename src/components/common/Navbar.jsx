@@ -9,7 +9,6 @@ const navItems = [
   { id: 'skills', label: 'Skills' },
   { id: 'projects', label: 'Projects' },
   { id: 'education', label: 'Education' },
-  { id: 'certifications', label: 'Certs' },
   { id: 'achievements', label: 'Awards' },
   { id: 'resume', label: 'Resume' },
   { id: 'activity', label: 'Activity' },

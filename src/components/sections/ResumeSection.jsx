@@ -287,36 +287,34 @@ CERTIFICATIONS & ACHIEVEMENTS
             <div className="space-y-4 pl-0 sm:pl-11">
               <div className="p-4 rounded-xl bg-stone-100/70 dark:bg-[#12151e]/80 border border-stone-200/80 dark:border-white/10 space-y-1.5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-xs sm:text-sm text-[var(--text-primary)] gap-1">
-                  <span>Parth's Minimal Developer Portfolio <span className="font-normal text-[var(--text-secondary)]">(React, Vite, Tailwind CSS)</span></span>
-                  <a href="https://github.com/parthtantak/portfolio" target="_blank" rel="noreferrer" className="font-mono text-[#de6430] text-xs font-semibold hover:underline">
-                    github.com/parthtantak/portfolio
-                  </a>
+                  <span>CIE-2 Tracker & Termwork Management System <span className="font-normal text-[var(--text-secondary)]">(React, Node.js, Express.js, MySQL, Tailwind CSS)</span></span>
+                  <span className="font-mono text-[#de6430] text-xs font-semibold">Full-Stack Web App</span>
                 </div>
                 <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                  Engineered a responsive developer portfolio featuring GlassOS spatial background canvas, live GitHub REST API telemetry, and command palette navigation.
+                  A full-stack web application for managing CIE-2 activities, termwork submissions, teacher evaluation, marks tracking, performance analysis, PDF uploads, role-based authentication, and report generation.
                 </p>
               </div>
 
               <div className="p-4 rounded-xl bg-stone-100/70 dark:bg-[#12151e]/80 border border-stone-200/80 dark:border-white/10 space-y-1.5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-xs sm:text-sm text-[var(--text-primary)] gap-1">
-                  <span>C++ Algorithmic Workbench & Inventory System <span className="font-normal text-[var(--text-secondary)]">(C++, OOP, File I/O)</span></span>
+                  <span>Airport Reservation Management System <span className="font-normal text-[var(--text-secondary)]">(C++, OOP, File Handling)</span></span>
                   <span className="font-mono text-[var(--text-muted)] text-xs font-semibold">C++ Console App</span>
                 </div>
                 <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                  Implemented console-based inventory management application utilizing object-oriented principles, custom data structures, and binary file data persistence.
+                  A console-based C++ application that manages flight schedules, ticket booking, cancellation, passenger records, seat allocation, and reservation management using Object-Oriented Programming and file handling.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Certifications & Achievements */}
+          {/* Achievements */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg border border-[#de6430]/40 bg-[#de6430]/10 flex items-center justify-center text-[#de6430] shrink-0">
                 <Award className="w-4 h-4" />
               </div>
               <h3 className="text-xs sm:text-sm font-mono font-extrabold text-[var(--text-primary)] uppercase tracking-widest">
-                CERTIFICATIONS & ACHIEVEMENTS
+                ACHIEVEMENTS
               </h3>
             </div>
             

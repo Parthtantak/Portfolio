@@ -15,10 +15,10 @@ export const portfolioData = {
     statusAvailable: true,
     typingRoles: [
       "B.Tech IT Student",
-      "Frontend Web Developer",
-      "UI/UX & Creative Designer",
+      "Full-Stack Web Developer",
+      "Software Developer",
       "C / C++ Programmer",
-      "E-Sports & Tech Explorer"
+      "Problem Solver"
     ],
     socials: {
       github: "https://github.com/parthtantak",
@@ -31,30 +31,30 @@ export const portfolioData = {
 
   stats: [
     { label: "B.Tech IT Stream", value: "Zeal COE", suffix: " Pune", icon: "GraduationCap" },
-    { label: "Core Focus", value: "Frontend", suffix: " Dev", icon: "Code2" },
+    { label: "Core Focus", value: "Software", suffix: " Dev", icon: "Code2" },
     { label: "Academic Standing", value: "Top Grades", suffix: " PCM", icon: "Trophy" },
-    { label: "Special Interests", value: "UI/UX & Drawing", suffix: " Creative", icon: "Award" }
+    { label: "Special Interests", value: "UI/UX & Systems", suffix: " Creative", icon: "Award" }
   ],
 
   about: {
     title: "About Me",
-    subtitle: "Designing Calm, Intelligent Interfaces & Building Web Systems",
+    subtitle: "Designing Intelligent Web Systems & Building C++ Applications",
     paragraphs: [
-      "I am an enthusiastic Information Technology student currently pursuing my B.Tech degree at Zeal College of Engineering & Research, Pune. I focus on building interfaces that feel stable, intentional, clean, and distraction-free.",
-      "My technical journey combines web development fundamentals (HTML5, CSS3, JavaScript, React) with structured programming in C and C++, as well as continuous exploration of modern UI architecture and emerging tech trends.",
-      "Beyond coding, I am passionate about creative drawing, keeping up with global technology advancements, and playing outdoor sports like Cricket, Basketball, Volleyball, and E-Sports."
+      "I am an enthusiastic Information Technology student currently pursuing my B.Tech degree at Zeal College of Engineering & Research, Pune. I focus on building software systems that are efficient, structured, and user-centric.",
+      "My technical expertise spans full-stack web development (React, Node.js, Express, MySQL, Tailwind CSS) alongside object-oriented programming in C and C++, file handling architectures, and database design.",
+      "Beyond coding, I am passionate about software design patterns, keeping up with global technology advancements, and playing outdoor sports like Cricket, Basketball, Volleyball, and E-Sports."
     ],
     highlights: [
       "Pursuing B.Tech in Information Technology at Zeal COE, Pune",
-      "Self-motivated, disciplined & quick learner with curiosity for new tech",
-      "Proficient in Web Development (HTML, CSS, JS, React) & C/C++ Programming",
-      "Strong background in Creative Visual Design & Teamwork"
+      "Self-motivated, disciplined & quick learner with curiosity for system architecture",
+      "Proficient in Full-Stack Web Development (React, Node, Express, MySQL) & C/C++",
+      "Strong background in Problem Solving & Clean Code Architecture"
     ],
     strengths: [
-      "Self-motivated and disciplined approach to problem solving",
-      "Quick learner with genuine curiosity for new software paradigms",
-      "Positive attitude towards technical challenges & collaborative teamwork",
-      "Ability to work effectively in fast-paced team environments"
+      "Self-motivated and disciplined approach to software development",
+      "Quick learner with genuine curiosity for full-stack and systems paradigms",
+      "Positive attitude towards complex technical challenges & team collaboration",
+      "Ability to engineer reliable, scalable software solutions"
     ]
   },
 
@@ -63,62 +63,40 @@ export const portfolioData = {
       { id: "all", label: "All Skills" },
       { id: "web", label: "Web Development" },
       { id: "programming", label: "Programming" },
-      { id: "tools", label: "Tools & Creative" }
+      { id: "tools", label: "Tools & Databases" }
     ],
     items: [
-      { name: "Web Development (HTML5 / CSS3)", category: "web", level: 90, icon: "Layout", tag: "Advanced" },
+      { name: "React.js & Tailwind CSS", category: "web", level: 88, icon: "Atom", tag: "Frontend" },
+      { name: "Node.js & Express.js", category: "web", level: 82, icon: "Server", tag: "Backend" },
+      { name: "MySQL & Database Management", category: "web", level: 80, icon: "Database", tag: "Database" },
       { name: "JavaScript & ES6+", category: "web", level: 85, icon: "FileCode2", tag: "Advanced" },
-      { name: "React.js & Tailwind CSS", category: "web", level: 82, icon: "Atom", tag: "Proficient" },
+      { name: "C++ Programming & OOP", category: "programming", level: 84, icon: "FileTerminal", tag: "OOP & File I/O" },
       { name: "C Programming", category: "programming", level: 80, icon: "Cpu", tag: "Core Language" },
-      { name: "C++ Programming", category: "programming", level: 78, icon: "FileTerminal", tag: "OOP Fundamentals" },
-      { name: "MS Office (Word, PowerPoint, Excel)", category: "tools", level: 92, icon: "Box", tag: "Productivity" },
       { name: "Git / GitHub / Version Control", category: "tools", level: 85, icon: "GitBranch", tag: "Essential" },
-      { name: "Creative Drawing & Visual UI Design", category: "tools", level: 88, icon: "Sparkles", tag: "Creative" }
+      { name: "MS Office & Document Systems", category: "tools", level: 92, icon: "Box", tag: "Productivity" }
     ]
   },
 
   projects: [
     {
-      id: "minimal-portfolio",
-      title: "Parth's Minimal Developer Portfolio",
+      id: "cie2-tracker",
+      num: "01",
+      badge: "Full-Stack Web App",
+      headerTitle: "CIE-2 & Termwork System",
+      title: "CIE-2 Tracker & Termwork Management System",
       category: "web",
-      categoryName: "Frontend & UI Design",
-      featured: true,
-      description: "A minimal, creative, and distraction-free developer portfolio designed to showcase calm and intelligent web interfaces.",
-      longDescription: "Engineered with React, Vite, Tailwind CSS, and Framer Motion. Features dark glassmorphism aesthetics, ambient background glow, interactive particle canvas, 3D card tilt, custom cursor, theme switcher, and command palette navigation.",
-      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80",
-      tags: ["React", "Vite", "Tailwind CSS", "Framer Motion", "GitHub Pages"],
-      github: "https://github.com/parthtantak/portfolio",
-      live: "https://parthtantak.github.io/portfolio/",
-      highlights: ["Calm Intelligent UI", "Responsive Glassmorphism", "Theme Persistence"]
+      description: "A full-stack web application for managing CIE-2 activities, termwork submissions, teacher evaluation, marks tracking, performance analysis, PDF uploads, role-based authentication, and report generation for students and faculty.",
+      tags: ["React", "Node.js", "Express.js", "MySQL", "Tailwind CSS"]
     },
     {
-      id: "campus-activity-hub",
-      title: "Zeal IT Campus & Activity Portal",
-      category: "web",
-      categoryName: "Web Application",
-      featured: true,
-      description: "Interactive web portal for B.Tech IT students to manage academic notices, timetable schedules, and team events.",
-      longDescription: "Built with HTML5, CSS3, JavaScript, and React. Streamlines campus collaboration, assignment tracking, and student activity scheduling with a clean, dark-themed user interface.",
-      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
-      tags: ["HTML5", "CSS3", "JavaScript", "React", "UI Design"],
-      github: "https://github.com/parthtantak",
-      live: "https://parthtantak.github.io/portfolio/",
-      highlights: ["Student Workflow Automation", "Clean Minimalist UI", "Mobile First Design"]
-    },
-    {
-      id: "cpp-algorithms-matrix",
-      title: "C / C++ Algorithmic Workbench",
+      id: "airport-reservation",
+      num: "02",
+      badge: "C++ Console App",
+      headerTitle: "Airport Reservation",
+      title: "Airport Reservation Management System",
       category: "programming",
-      categoryName: "Programming & Data Structures",
-      featured: true,
-      description: "Collection of optimized C/C++ algorithms, data structure implementations, and problem-solving solutions.",
-      longDescription: "Features implementations of sorting algorithms, binary trees, linked lists, array manipulations, and dynamic memory allocation with structured comments and benchmark tests.",
-      image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80",
-      tags: ["C", "C++", "Data Structures", "Algorithms", "GCC Compiler"],
-      github: "https://github.com/parthtantak",
-      live: "https://parthtantak.github.io/portfolio/",
-      highlights: ["Structured Algorithms", "Memory Management", "Clean Code Standards"]
+      description: "A console-based C++ application that manages flight schedules, ticket booking, cancellation, passenger records, seat allocation, and reservation management using Object-Oriented Programming and file handling.",
+      tags: ["C++", "OOP", "File Handling"]
     }
   ],
 
@@ -131,12 +109,12 @@ export const portfolioData = {
       status: "Currently Enrolled",
       courses: [
         "Programming & Problem Solving (C / C++)",
-        "Web Engineering & UI Development",
+        "Web Engineering & Full-Stack Systems",
+        "Database Management Systems (DBMS)",
         "Engineering Mathematics",
-        "Basic Electrical & Electronics",
-        "Computer Fundamentals & Systems"
+        "Computer Fundamentals & Architecture"
       ],
-      description: "Engaged in B.Tech Information Technology coursework focusing on software logic, web technologies, computer architecture, and innovative engineering applications."
+      description: "Engaged in B.Tech Information Technology coursework focusing on software engineering, web architectures, database design, and algorithmic problem solving."
     },
     {
       degree: "Higher Secondary Certificate (HSC - 12th)",
@@ -144,7 +122,7 @@ export const portfolioData = {
       period: "Completed",
       score: "Secured Top Grades in PCM",
       status: "Completed with Distinction",
-      courses: ["Physics", "Chemistry", "Mathematics", "English", "Computer Science / Information Tech"],
+      courses: ["Physics", "Chemistry", "Mathematics", "English", "Computer Science"],
       description: "Achieved excellent academic performance with top grades in Physics, Chemistry, and Mathematics."
     },
     {
@@ -155,25 +133,6 @@ export const portfolioData = {
       status: "Completed",
       courses: ["Mathematics", "Science", "Social Sciences", "English", "Languages"],
       description: "Laid strong foundational analytical, mathematical, and communication skills."
-    }
-  ],
-
-  certifications: [
-    {
-      title: "Web Development & Responsive UI Engineering",
-      issuer: "Self-Driven / Online Academy",
-      date: "2024",
-      credentialId: "PARTH-WEB-2024",
-      verifyUrl: "https://parthtantak.github.io/portfolio/",
-      icon: "Code"
-    },
-    {
-      title: "C & C++ Programming Foundations",
-      issuer: "Zeal College of Engineering & Research, Pune",
-      date: "2024",
-      credentialId: "ZCOER-IT-C24",
-      verifyUrl: "https://parthtantak.github.io/portfolio/",
-      icon: "Server"
     }
   ],
 
