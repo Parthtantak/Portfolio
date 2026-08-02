@@ -19,34 +19,45 @@ import {
   RotateCcw,
   FileText
 } from 'lucide-react';
+import html2pdf from 'html2pdf.js';
 import { GithubIcon, LinkedinIcon } from '../common/SocialIcons';
 import { audioFx } from '../../utils/audio';
 
 export const ResumeSection = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [zoomScale, setZoomScale] = useState(1);
 
   const handlePrint = () => {
     audioFx.playClick();
-    const originalTitle = document.title;
-    document.title = 'Parth_Nitin_Tantak_Resume';
     window.print();
-    setTimeout(() => {
-      document.title = originalTitle;
-    }, 1000);
   };
 
-  const handleDownloadPdf = () => {
+  const handleDownloadPdf = async () => {
     audioFx.playClick();
-    const originalTitle = document.title;
-    document.title = 'Parth_Nitin_Tantak_Resume';
-    window.print();
-    setTimeout(() => {
-      document.title = originalTitle;
-    }, 1000);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 3000);
+    setIsDownloading(true);
+
+    const element = document.querySelector('.resume-paper-document');
+    if (!element) {
+      setIsDownloading(false);
+      return;
+    }
+
+    try {
+      const opt = {
+        margin: [8, 8, 8, 8],
+        filename: 'Parth_Nitin_Tantak_Resume.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      await html2pdf().set(opt).from(element).save();
+    } catch (err) {
+      console.error('Direct PDF download error:', err);
+    } finally {
+      setTimeout(() => setIsDownloading(false), 2000);
+    }
   };
 
   const handleZoomIn = () => {
@@ -107,15 +118,20 @@ export const ResumeSection = () => {
               className="px-4 py-2.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs font-bold font-mono flex items-center gap-2 hover:bg-stone-200/50 dark:hover:bg-[#1C1F26] active:scale-95 transition-all shadow-2xs cursor-pointer"
             >
               <Printer className="w-4 h-4 text-[#de6430]" />
-              <span>Print PDF</span>
+              <span>Print</span>
             </button>
 
             <button
               onClick={handleDownloadPdf}
-              className="px-5 py-2.5 rounded-full bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950 text-xs font-bold font-sans flex items-center gap-2 hover:bg-zinc-800 dark:hover:bg-white active:scale-95 transition-all shadow-xs hover:shadow-md cursor-pointer"
+              disabled={isDownloading}
+              className="px-5 py-2.5 rounded-full bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950 text-xs font-bold font-sans flex items-center gap-2 hover:bg-zinc-800 dark:hover:bg-white active:scale-95 transition-all shadow-xs hover:shadow-md cursor-pointer disabled:opacity-60"
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Download className="w-4 h-4" />}
-              <span>{copied ? 'Downloading PDF...' : 'Download PDF'}</span>
+              {isDownloading ? (
+                <Check className="w-4 h-4 text-emerald-400 animate-pulse" />
+              ) : (
+                <Download className="w-4 h-4 text-[#de6430] dark:text-[#de6430]" />
+              )}
+              <span>{isDownloading ? 'Downloading PDF...' : 'Download Resume'}</span>
             </button>
           </div>
         </div>
@@ -348,10 +364,10 @@ export const ResumeSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-zinc-950/85 backdrop-blur-xl flex flex-col items-center justify-between p-3 sm:p-6 overflow-hidden"
+            className="fixed inset-0 z-50 bg-zinc-950/85 backdrop-blur-xl flex flex-col items-center justify-between p-3 sm:p-6 overflow-hidden print-hide"
           >
             {/* Modal Header Toolbar */}
-            <div className="w-full max-w-5xl bg-zinc-900/90 dark:bg-[#111216] border border-white/10 rounded-2xl px-4 py-3 flex items-center justify-between shadow-xl z-30 shrink-0 font-mono text-xs mb-4">
+            <div className="w-full max-w-5xl bg-zinc-900/90 dark:bg-[#111216] border border-white/10 rounded-2xl px-4 py-3 flex items-center justify-between shadow-xl z-30 shrink-0 font-mono text-xs mb-4 no-print">
               <div className="flex items-center gap-2.5">
                 <FileText className="w-4 h-4 text-[#de6430]" />
                 <span className="font-bold text-zinc-100 hidden sm:inline">Parth_Nitin_Tantak_Resume.pdf</span>
@@ -399,10 +415,15 @@ export const ResumeSection = () => {
 
                 <button
                   onClick={handleDownloadPdf}
-                  className="px-3.5 py-1.5 rounded-xl bg-[#de6430] text-white hover:bg-[#c85528] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-md"
+                  disabled={isDownloading}
+                  className="px-3.5 py-1.5 rounded-xl bg-[#de6430] text-white hover:bg-[#c85528] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-md disabled:opacity-60"
                 >
-                  <Download className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Download PDF</span>
+                  {isDownloading ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+                  ) : (
+                    <Download className="w-3.5 h-3.5" />
+                  )}
+                  <span className="hidden sm:inline">{isDownloading ? 'Downloading PDF...' : 'Download PDF'}</span>
                 </button>
 
                 <button

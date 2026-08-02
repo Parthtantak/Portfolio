@@ -161,21 +161,28 @@ body {
 
 /* Precise A4 Print Formatting for Resume */
 @media print {
-  body {
+  html, body {
     background: #ffffff !important;
     color: #0f172a !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
-  /* Hide all non-resume website elements */
-  body > div > *:not(main),
-  main > section:not(#resume),
-  header, footer, nav, canvas, button, .no-print {
+  /* Hide website UI elements */
+  header, footer, nav, canvas, button, .print-hide, .no-print {
     display: none !important;
   }
 
+  /* Hide non-resume sections */
+  main > section:not(#resume) {
+    display: none !important;
+  }
+
+  /* Ensure resume section and paper are 100% visible */
   #resume {
     padding: 0 !important;
     margin: 0 !important;
+    visibility: visible !important;
   }
 
   .resume-paper-document {
@@ -184,14 +191,19 @@ body {
     box-shadow: none !important;
     border: none !important;
     padding: 0 !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     width: 100% !important;
     max-width: 100% !important;
     border-radius: 0 !important;
+    transform: none !important;
+    overflow: visible !important;
+    visibility: visible !important;
   }
 
   .resume-paper-document * {
     color: #0f172a !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   .resume-paper-document .accent-text {
