@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Light Mode Palette (STRICTLY UNTOUCHED) */
+    --bg-primary: #FAF8F5;
+    --bg-secondary: #F3EFE6;
+    --bg-card: rgba(255, 255, 255, 0.75);
+    --bg-card-hover: rgba(255, 255, 255, 0.9);
+    --border-color: rgba(24, 24, 27, 0.08);
+    --border-highlight: rgba(255, 255, 255, 0.8);
+    --border-glow: rgba(222, 100, 48, 0.45);
+    --text-primary: #18181b;
+    --text-secondary: #52525b;
+    --text-muted: #71717a;
+    --accent-orange: #de6430;
+    --accent-glow: rgba(222, 100, 48, 0.15);
+    --glass-bg: rgba(250, 248, 245, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --shadow-glass: 0 12px 32px -8px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+    --shadow-glass-hover: 0 20px 48px -10px rgba(0, 0, 0, 0.09), 0 0 25px rgba(222, 100, 48, 0.12);
+  }
+
+  .dark {
+    /* Premium GlassOS Dark Mode System */
+    --bg-primary: #09090B;
+    --bg-secondary: #111216;
+    --bg-card: rgba(22, 24, 29, 0.75);
+    --bg-card-hover: #1C1F26;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-highlight: rgba(255, 255, 255, 0.12);
+    --border-glow: rgba(222, 100, 48, 0.45);
+    --text-primary: #F8FAFC;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+    --text-subtle: #64748B;
+    --accent-orange: #de6430;
+    --accent-glow: rgba(222, 100, 48, 0.14);
+    --glass-bg: rgba(9, 9, 11, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --shadow-glass: 0 16px 40px -10px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-glass-hover: 0 24px 56px -12px rgba(0, 0, 0, 0.65), 0 0 20px rgba(222, 100, 48, 0.14);
+  }
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Minimalist GlassOS Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(222, 100, 48, 0.5);
+  background-clip: content-box;
+}
+
+/* GlassOS Surface & Window Card System */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-glass);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
+}
+
+.glass-panel:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-glass-hover);
+}
+
+/* Specular Reflection Highlight Border */
+.specular-border {
+  position: relative;
+}
+
+.specular-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg, var(--border-highlight) 0%, transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* GlassOS Window Header Accent Dots */
+.window-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.window-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+}
+
+.window-dot-red { background-color: #ff5f56; border: 1px solid #e0443e; }
+.window-dot-yellow { background-color: #ffbd2e; border: 1px solid #dea123; }
+.window-dot-green { background-color: #27c93f; border: 1px solid #1aab29; }
+
+/* Micro-Interaction Utilities */
+.card-lift {
+  will-change: transform, box-shadow;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-lift:hover {
+  transform: translateY(-2px);
+}
+
+.img-zoom {
+  will-change: transform;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .img-zoom {
+  transform: scale(1.04);
+}
+
+.icon-tilt {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .icon-tilt {
+  transform: rotate(3deg) scale(1.04);
+}
+
+::selection {
+  background-color: rgba(222, 100, 48, 0.22);
+  color: #de6430;
+}
