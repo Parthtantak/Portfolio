@@ -16,8 +16,6 @@ import {
   FileText,
   AlertCircle
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
 import { GithubIcon, LinkedinIcon } from '../common/SocialIcons';
 import { audioFx } from '../../utils/audio';
 
@@ -34,56 +32,368 @@ export const ResumeSection = () => {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  const handleDownloadPdf = async () => {
+  const generatePrintableHtmlTemplate = () => `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parth_Nitin_Tantak_Resume</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+    
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 24px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .header {
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .name {
+      font-size: 26px;
+      font-weight: 800;
+      color: #020617;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #de6430;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    .contact {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #334155;
+      text-align: right;
+    }
+
+    .contact-item {
+      margin-bottom: 3px;
+    }
+
+    .section {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 800;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title-icon {
+      width: 10px;
+      height: 10px;
+      background: rgba(222, 100, 48, 0.15);
+      border: 1px solid rgba(222, 100, 48, 0.4);
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .summary-text {
+      font-size: 12px;
+      color: #334155;
+      padding-left: 18px;
+    }
+
+    .timeline {
+      padding-left: 18px;
+      border-left: 2px solid #e2e8f0;
+      margin-left: 6px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #de6430;
+      position: absolute;
+      left: -23px;
+      top: 5px;
+      border: 2px solid #ffffff;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 12px;
+      color: #0f172a;
+    }
+
+    .item-sub {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding-left: 18px;
+    }
+
+    .skill-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 11px;
+    }
+
+    .skill-card strong {
+      color: #0f172a;
+    }
+
+    .projects-list {
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .project-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .project-title {
+      font-weight: 700;
+      font-size: 12px;
+      color: #0f172a;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .project-desc {
+      font-size: 11px;
+      color: #475569;
+      margin-top: 4px;
+    }
+
+    .achievements-list {
+      padding-left: 18px;
+      list-style: none;
+    }
+
+    .achievements-list li {
+      position: relative;
+      padding-left: 14px;
+      font-size: 11.5px;
+      color: #334155;
+      margin-bottom: 5px;
+    }
+
+    .achievements-list li::before {
+      content: '•';
+      color: #de6430;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1 class="name">Parth Nitin Tantak</h1>
+      <p class="subtitle">B.Tech Information Technology Student | Aspiring Software Developer</p>
+    </div>
+    <div class="contact">
+      <div class="contact-item">Kalewadi, Pimpri-Chinchwad, Pune, India</div>
+      <div class="contact-item">+91 88558 90656 • tantakparth@gmail.com</div>
+      <div class="contact-item" style="color: #de6430;">github.com/parthtantak • linkedin.com/in/parthtantak</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="section-title-icon"></span>
+      Professional Summary
+    </div>
+    <p class="summary-text">
+      Motivated B.Tech IT student at Zeal College of Engineering & Research, Pune. Proficient in structured programming with C and C++, modern frontend web development (JavaScript, React, Tailwind CSS), and algorithmic problem solving. Dedicated to clean software engineering and user-focused web interfaces.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="section-title-icon"></span>
+      Education
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="item-header">
+          <span>B.Tech in Information Technology — <span style="font-weight:400; color:#334155;">Zeal College of Engineering & Research, Pune</span></span>
+          <span style="font-family:'JetBrains Mono'; font-size:11px; color:#64748b;">2025 — 2029 (2nd Year)</span>
+        </div>
+        <p class="item-sub">Focus on Programming & Problem Solving (C/C++), Web Engineering, Engineering Mathematics, and Computer Architecture.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="item-header">
+          <span>Higher Secondary Certificate (HSC - 12th) — <span style="font-weight:400; color:#334155;">Pratibha Jr. College, Pune</span></span>
+          <span style="font-family:'JetBrains Mono'; font-size:11px; color:#059669;">Completed</span>
+        </div>
+        <p class="item-sub">Science Stream with Distinction in Physics, Chemistry, and Mathematics (PCM).</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="item-header">
+          <span>Secondary School Certificate (SSC - 10th) — <span style="font-weight:400; color:#334155;">Infant Jesus High School, Pune</span></span>
+          <span style="font-family:'JetBrains Mono'; font-size:11px; color:#059669;">Completed</span>
+        </div>
+        <p class="item-sub">First Class Distinction with strong mathematical and analytical foundations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="section-title-icon"></span>
+      Technical Skills
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <strong>Languages: </strong>C, C++, JavaScript (ES6+), HTML5, CSS3
+      </div>
+      <div class="skill-card">
+        <strong>Frontend & Tools: </strong>React.js, Vite, Tailwind CSS, Git, GitHub
+      </div>
+      <div class="skill-card">
+        <strong>Core Concepts: </strong>Data Structures (DSA), OOP, Web Systems
+      </div>
+      <div class="skill-card">
+        <strong>Productivity: </strong>MS Office, Linux CLI, Clean UI Architecture
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="section-title-icon"></span>
+      Key Projects
+    </div>
+    <div class="projects-list">
+      <div class="project-card">
+        <div class="project-title">
+          <span>CIE-2 Tracker & Termwork Management System <span style="font-weight:400; color:#64748b;">(React, Node.js, Express.js, MySQL, Tailwind CSS)</span></span>
+          <span style="font-family:'JetBrains Mono'; font-size:11px; color:#de6430;">Full-Stack Web App</span>
+        </div>
+        <p class="project-desc">A full-stack web application for managing CIE-2 activities, termwork submissions, teacher evaluation, marks tracking, performance analysis, PDF uploads, role-based authentication, and report generation.</p>
+      </div>
+      <div class="project-card">
+        <div class="project-title">
+          <span>Airport Reservation Management System <span style="font-weight:400; color:#64748b;">(C++, OOP, File Handling)</span></span>
+          <span style="font-family:'JetBrains Mono'; font-size:11px; color:#64748b;">C++ Console App</span>
+        </div>
+        <p class="project-desc">A console-based C++ application that manages flight schedules, ticket booking, cancellation, passenger records, seat allocation, and reservation management using Object-Oriented Programming and file handling.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="section-title-icon"></span>
+      Achievements
+    </div>
+    <ul class="achievements-list">
+      <li><strong>Academic Distinction (12th Board):</strong> Top grades in Physics, Chemistry, and Mathematics (PCM).</li>
+      <li><strong>Web Development Certification (2024):</strong> Completed responsive UI engineering and JavaScript ES6+ modules.</li>
+      <li><strong>Sports & Co-Curricular:</strong> Active athlete in Cricket, Basketball, Volleyball and competitive E-Sports tournaments.</li>
+    </ul>
+  </div>
+</body>
+</html>
+`;
+
+  const handleDownloadPdf = () => {
     audioFx.playClick();
     setIsDownloading(true);
-    showToast('Generating high-resolution A4 PDF...', 'info');
+    showToast('Generating vector PDF template...', 'info');
 
     try {
-      const targetElement = paperRef.current || document.querySelector('.resume-paper-document');
-      if (!targetElement) {
-        throw new Error('Resume element not found.');
-      }
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
 
-      // Render high-definition canvas (scale: 2.5 for crisp rendering)
-      const canvas = await html2canvas(targetElement, {
-        scale: 2.5,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-        windowWidth: 1024,
-        onclone: (clonedDoc) => {
-          const clonedPaper = clonedDoc.querySelector('.resume-paper-document');
-          if (clonedPaper) {
-            clonedPaper.style.transform = 'none';
-            clonedPaper.style.margin = '0';
-            clonedPaper.style.boxShadow = 'none';
-            clonedPaper.style.borderRadius = '0';
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(generatePrintableHtmlTemplate());
+      doc.close();
+
+      setTimeout(() => {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        setTimeout(() => {
+          if (document.body.contains(iframe)) {
+            document.body.removeChild(iframe);
           }
-        }
-      });
-
-      const imgData = canvas.toDataURL('image/jpeg', 0.98);
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = pdfWidth;
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, Math.min(imgHeight, pdfHeight));
-      pdf.save('Parth_Nitin_Tantak_Resume.pdf');
-      
-      showToast('Parth_Nitin_Tantak_Resume.pdf downloaded successfully!', 'success');
+          setIsDownloading(false);
+          showToast('Vector PDF template rendered successfully!', 'success');
+        }, 1000);
+      }, 300);
     } catch (err) {
-      console.error('PDF Download Exception:', err);
-      showToast('Failed to generate PDF. Please try again.', 'error');
-    } finally {
+      console.error('PDF Export Error:', err);
       setIsDownloading(false);
+      showToast('Failed to export PDF.', 'error');
     }
   };
 
@@ -414,7 +724,7 @@ export const ResumeSection = () => {
                   ) : (
                     <Download className="w-3.5 h-3.5" />
                   )}
-                  <span>{isDownloading ? 'Downloading...' : 'Download Resume'}</span>
+                  <span>{isDownloading ? 'Exporting...' : 'Download Resume'}</span>
                 </button>
 
                 <button
